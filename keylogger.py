@@ -3,7 +3,7 @@ from datetime import datetime
 import sys
 
 class EthicalKeylogger:
-    def __init__(self, log_file="keystrokes.log"):  # Fixed method name from _init_ to __init__
+    def __init__(self, log_file="keystrokes.log"):
         self.log_file = log_file
         self.running = False
         self.start_time = None
@@ -17,12 +17,13 @@ class EthicalKeylogger:
 
     def on_key_event(self, event):
         """Callback for key events"""
-        try:
-            with open(self.log_file, "a") as f:
-                log_entry = f"[{datetime.now()}] {event.name}\n"
-                f.write(log_entry)
-        except Exception as e:
-            print(f"Error Logging Key: {e}")
+        if event.event_type == "down":  # Only log key down events
+            try:
+                with open(self.log_file, "a") as f:
+                    log_entry = f"[{datetime.now()}] {event.name}\n"
+                    f.write(log_entry)
+            except Exception as e:
+                print(f"Error Logging Key: {e}")
 
     def start(self):
         """Start the keylogger."""
@@ -58,5 +59,5 @@ if __name__ == "__main__":
         logger.stop()
     except Exception as e:
         print(f"Error: {e}")
-        sys.exit(1)  # Fixed syntax: sys exit(1) → sys.exit(1)
+        sys.exit(1)
                              
